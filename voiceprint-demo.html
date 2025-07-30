@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智伴助手 - 声纹管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 375px;
+            margin: 0 auto;
+            background: #fff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .page {
+            display: none;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 通用组件 */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .back-btn:hover {
+            color: #007AFF;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,122,255,0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn-danger {
+            background: #FF3B30;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d70015;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* 我的页面 */
+        .profile-header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .phone-number {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .info-support {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .menu-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .menu-item-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            color: #007AFF;
+        }
+
+        .arrow-right {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        /* 声纹管理特殊卡片 */
+        .voiceprint-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .voiceprint-card .menu-icon {
+            color: white;
+        }
+
+        .voiceprint-card .arrow-right {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .voiceprint-desc {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* 声纹列表页 */
+        .stats-bar {
+            background: #f8f9fa;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .voiceprint-item {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .voiceprint-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .voiceprint-item:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .voiceprint-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .voiceprint-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .default-badge {
+            background: #007AFF;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #FF3B30;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        /* 声纹采集流程 */
+        .step-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .step-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .sample-text {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-size: 16px;
+            line-height: 1.6;
+            border-left: 4px solid #007AFF;
+        }
+
+        .recording-area {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .wave-animation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            margin: 30px 0;
+        }
+
+        .wave-bar {
+            width: 4px;
+            height: 20px;
+            background: #007AFF;
+            margin: 0 2px;
+            border-radius: 2px;
+            animation: wave 1s ease-in-out infinite;
+        }
+
+        .wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes wave {
+            0%, 100% { height: 20px; }
+            50% { height: 60px; }
+        }
+
+        .progress-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #007AFF;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #007AFF;
+        }
+
+        .quick-link {
+            color: #007AFF;
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* 声纹详情页 */
+        .detail-header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 30px;
+        }
+
+        .detail-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .edit-name-btn {
+            background: none;
+            border: 1px solid #007AFF;
+            color: #007AFF;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .status-overview {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .status-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .association-section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .select-all-btn {
+            background: none;
+            border: none;
+            color: #007AFF;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .checkbox-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .checkbox-item:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .checkbox-item label {
+            flex: 1;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* 对话页面 */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .chat-header {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .voiceprint-toggle {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.user .message-bubble {
+            background: #007AFF;
+            color: white;
+        }
+
+        .message.assistant .message-bubble {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .chat-input {
+            background: white;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .send-btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 320px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            min-width: 80px;
+        }
+
+        .modal-btn.primary {
+            background: #007AFF;
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        /* 声纹选择面板 */
+        .voiceprint-selector {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .voiceprint-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .voiceprint-option:hover {
+            background: #f8f9fa;
+        }
+
+        .voiceprint-option.selected {
+            background: #e3f2fd;
+            color: #007AFF;
+        }
+
+        .voiceprint-option:last-child {
+            border-bottom: none;
+        }
+
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 375px;
+            width: 100%;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #666;
+            font-size: 12px;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: #007AFF;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 375px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* 动画 */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 我的页面 -->
+        <div id="myPage" class="page active">
+            <div class="profile-header">
+                <div class="avatar">👤</div>
+                <div class="phone-number">189****0820</div>
+                <div class="info-support">信息支持</div>
+            </div>
+
+            <div class="menu-section">
+                <div class="section-title">个人信息</div>
+                <div class="menu-item" onclick="showPage('personalInfo')">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">👤</div>
+                        <div>个人信息</div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                </div>
+                <div class="menu-item" onclick="showPage('serviceSupport')">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">🎧</div>
+                        <div>服务支持</div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <div class="section-title">使用相关</div>
+                <div class="menu-item" onclick="showPage('cozeConnect')">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">🔗</div>
+                        <div>COZE对接</div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                </div>
+                <div class="menu-item" onclick="showPage('notifications')">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">💬</div>
+                        <div>消息通知</div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                </div>
+                <div class="menu-item" onclick="showPage('addDevice')">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">➕</div>
+                        <div>添加设备</div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                </div>
+                <div class="menu-item" onclick="showPage('aiSettings')">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">🤖</div>
+                        <div>智能体设置</div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                </div>
+                <!-- 声纹管理入口 -->
+                <div class="menu-item voiceprint-card" onclick="showPage('voiceprintList')">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">🎵</div>
+                        <div>
+                            <div>声纹管理</div>
+                            <div class="voiceprint-desc">创建专属声纹，最多保存10条，关联设备/智能体，让交流更独特～</div>
+                        </div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                </div>
+                <div class="menu-item" onclick="showPage('aboutUs')">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">ℹ️</div>
+                        <div>关于我们</div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <div class="section-title">资源中心</div>
+                <div class="menu-item" onclick="showPage('myResources')">
+                    <div class="menu-item-left">
+                        <div class="menu-icon">📁</div>
+                        <div>我的资源</div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 声纹组列表页 -->
+        <div id="voiceprintList" class="page">
+            <div class="header">
+                <button class="back-btn" onclick="showPage('myPage')">‹ 返回</button>
+                <h1>声纹组管理</h1>
+                <div></div>
+            </div>
+
+            <div class="stats-bar">
+                <span class="stats-text">已采集 <span id="voiceprintCount">2</span>/10 条</span>
+                <button class="btn btn-primary" onclick="checkAndCreateVoiceprint()">新建声纹</button>
+            </div>
+
+            <div id="voiceprintListContainer">
+                <!-- 声纹列表项将通过 JavaScript 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 声纹采集流程页 -->
+        <div id="voiceprintCollection" class="page">
+            <div class="header">
+                <button class="back-btn" onclick="showPage('voiceprintList')">‹ 返回</button>
+                <h1>声纹采集</h1>
+                <div></div>
+            </div>
+
+            <!-- 步骤1：准备引导 -->
+            <div id="step1" class="step-container">
+                <div class="step-title">开始采集你的专属声纹</div>
+                <div class="step-desc">请在安静环境下，保持10cm距离，朗读下方内容～</div>
+                <div class="sample-text" id="sampleText">
+                    "你好呀，智能生活因你而独特，试试用不同语气朗读吧～"
+                </div>
+                <button class="btn btn-primary" onclick="startRecording()">开始录制</button>
+                <button class="btn btn-secondary" onclick="changeSampleText()" style="margin-left: 10px;">换个文本</button>
+            </div>
+
+            <!-- 步骤2：录制与分析 -->
+            <div id="step2" class="step-container" style="display: none;">
+                <div class="step-title">正在录制声纹</div>
+                <div class="step-desc">请保持安静，清晰朗读～</div>
+                <div class="wave-animation">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+                <div class="progress-text" id="recordProgress">录制中... 00:00/00:10</div>
+                <button class="btn btn-secondary" onclick="resetRecording()">重新录制</button>
+            </div>
+
+            <!-- 步骤3：特征处理与命名 -->
+            <div id="step3" class="step-container" style="display: none;">
+                <div class="step-title">声纹特征已采集</div>
+                <div class="step-desc">为它起个名字吧～</div>
+                <div class="input-group">
+                    <label class="input-label">声纹名称</label>
+                    <input type="text" class="input-field" id="voiceprintName" placeholder="请输入2-10个字符" maxlength="10">
+                </div>
+                <a href="#" class="quick-link" onclick="showPage('voiceprintDetail', {isNew: true})">提前关联设备/智能体？</a>
+                <div style="margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="completeCollection()">完成采集</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 声纹详情-关联设置页 -->
+        <div id="voiceprintDetail" class="page">
+            <div class="header">
+                <button class="back-btn" onclick="goBackFromDetail()">‹ 返回</button>
+                <h1>声纹详情</h1>
+                <div></div>
+            </div>
+
+            <div class="detail-header">
+                <div class="detail-name" id="detailVoiceprintName">我的声纹</div>
+                <button class="edit-name-btn" onclick="editVoiceprintName()">编辑名称</button>
+            </div>
+
+            <div class="status-overview">
+                <div class="status-item">
+                    <span>设备关联</span>
+                    <span id="deviceCount">已关联 1 台设备</span>
+                </div>
+                <div class="status-item">
+                    <span>智能体关联</span>
+                    <span id="agentCount">已关联 2 个智能体</span>
+                </div>
+            </div>
+
+            <div class="association-section">
+                <div class="section-header">
+                    <h3>设备关联</h3>
+                    <button class="select-all-btn" onclick="toggleSelectAll('devices')">全选/反选</button>
+                </div>
+                <div class="checkbox-list">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="device1" checked>
+                        <label for="device1">AI开发套件2.0</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="device2">
+                        <label for="device2">智能音箱Pro</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="device3">
+                        <label for="device3">车载助手</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="association-section">
+                <div class="section-header">
+                    <h3>智能体关联</h3>
+                    <button class="select-all-btn" onclick="toggleSelectAll('agents')">全选/反选</button>
+                </div>
+                <div class="checkbox-list">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="agent1" checked>
+                        <label for="agent1">圣诞老人</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="agent2" checked>
+                        <label for="agent2">生活助手</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="agent3">
+                        <label for="agent3">学习伙伴</label>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-primary" onclick="saveAssociations()">保存关联</button>
+            </div>
+        </div>
+
+        <!-- 对话页面 -->
+        <div id="chatPage" class="page">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <button class="back-btn" onclick="showPage('myPage')">‹</button>
+                    <div class="chat-title">圣诞老人</div>
+                    <button class="voiceprint-toggle" onclick="showVoiceprintSelector()">
+                        🎵 声纹选择
+                    </button>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant">
+                        <div class="message-bubble">
+                            Ho ho ho! 你好！我是圣诞老人，很高兴见到你！有什么想聊的吗？
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="输入消息..." onkeypress="handleEnter(event)">
+                    <button class="send-btn" onclick="sendMessage()">
+                        ➤
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item" onclick="showPage('homePage')">
+            <div class="nav-icon">🏠</div>
+            <div>首页</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('devicesPage')">
+            <div class="nav-icon">📱</div>
+            <div>设备</div>
+        </a>
+        <a href="#" class="nav-item active" onclick="showPage('myPage')">
+            <div class="nav-icon">👤</div>
+            <div>我的</div>
+        </a>
+    </div>
+
+    <!-- 弹窗 -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">确认操作</div>
+            <div class="modal-text" id="modalText">确定要执行此操作吗？</div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeModal()">取消</button>
+                <button class="modal-btn primary" id="confirmBtn" onclick="confirmAction()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 声纹选择弹窗 -->
+    <div id="voiceprintModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">选择本次对话声纹</div>
+            <div class="voiceprint-selector" id="voiceprintSelector">
+                <!-- 声纹选项将通过 JavaScript 动态生成 -->
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeVoiceprintModal()">取消</button>
+                <button class="modal-btn primary" onclick="confirmVoiceprintSelection()">确认使用</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentPage = 'myPage';
+        let voiceprints = [
+            {
+                id: 1,
+                name: '日常声纹',
+                createTime: '2024-01-15',
+                isDefault: true,
+                deviceCount: 1,
+                agentCount: 2
+            },
+            {
+                id: 2,
+                name: '工作声纹',
+                createTime: '2024-01-10',
+                isDefault: false,
+                deviceCount: 0,
+                agentCount: 1
+            }
+        ];
+        let selectedVoiceprint = 1;
+        let recordingTimer = null;
+        let recordingTime = 0;
+        let pendingAction = null;
+        let currentDetailId = null;
+
+        // 示例文本库
+        const sampleTexts = [
+            "你好呀，智能生活因你而独特，试试用不同语气朗读吧～",
+            "今天天气真不错，让我们一起享受美好的时光！",
+            "科技改变生活，AI让世界更加精彩纷呈。",
+            "春天来了，花儿开了，鸟儿在枝头歌唱。",
+            "读书破万卷，下笔如有神，知识就是力量。"
+        ];
+        let currentTextIndex = 0;
+
+        // 页面切换
+        function showPage(pageId, params = {}) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 显示目标页面
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                targetPage.classList.add('fade-in');
+                currentPage = pageId;
+                
+                // 页面特殊处理
+                if (pageId === 'voiceprintList') {
+                    renderVoiceprintList();
+                } else if (pageId === 'voiceprintDetail') {
+                    if (params.id) {
+                        currentDetailId = params.id;
+                        loadVoiceprintDetail(params.id);
+                    }
+                } else if (pageId === 'chatPage') {
+                    updateChatVoiceprintStatus();
+                }
+                
+                // 更新底部导航状态
+                updateBottomNav(pageId);
+            }
+        }
+
+        // 更新底部导航状态
+        function updateBottomNav(activePageId) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 根据页面设置对应的导航项为活跃状态
+            if (activePageId === 'myPage' || activePageId.includes('voiceprint') || activePageId === 'chatPage') {
+                document.querySelector('.nav-item:last-child').classList.add('active');
+            }
+        }
+
+        // 渲染声纹列表
+        function renderVoiceprintList() {
+            const container = document.getElementById('voiceprintListContainer');
+            const countElement = document.getElementById('voiceprintCount');
+            
+            countElement.textContent = voiceprints.length;
+            
+            container.innerHTML = voiceprints.map(vp => `
+                <div class="voiceprint-item" onclick="showVoiceprintDetail(${vp.id})">
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteVoiceprint(${vp.id})">删除</button>
+                    <div class="voiceprint-name">
+                        ${vp.name}
+                        ${vp.isDefault ? '<span class="default-badge">默认</span>' : ''}
+                    </div>
+                    <div class="voiceprint-meta">
+                        <span>采集时间：${vp.createTime}</span>
+                        <span>关联：${vp.deviceCount}设备 ${vp.agentCount}智能体</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 显示声纹详情
+        function showVoiceprintDetail(id) {
+            currentDetailId = id;
+            loadVoiceprintDetail(id);
+            showPage('voiceprintDetail');
+        }
+
+        // 加载声纹详情
+        function loadVoiceprintDetail(id) {
+            const voiceprint = voiceprints.find(vp => vp.id === id);
+            if (voiceprint) {
+                document.getElementById('detailVoiceprintName').textContent = voiceprint.name;
+                document.getElementById('deviceCount').textContent = `已关联 ${voiceprint.deviceCount} 台设备`;
+                document.getElementById('agentCount').textContent = `已关联 ${voiceprint.agentCount} 个智能体`;
+            }
+        }
+
+        // 检查并创建声纹
+        function checkAndCreateVoiceprint() {
+            if (voiceprints.length >= 10) {
+                showModal('已达上限', '已达上限～删除旧声纹可继续采集', () => {
+                    closeModal();
+                });
+            } else {
+                showPage('voiceprintCollection');
+                resetToStep1();
+            }
+        }
+
+        // 重置到步骤1
+        function resetToStep1() {
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'none';
+            document.getElementById('voiceprintName').value = '';
+        }
+
+        // 更换示例文本
+        function changeSampleText() {
+            currentTextIndex = (currentTextIndex + 1) % sampleTexts.length;
+            document.getElementById('sampleText').textContent = `"${sampleTexts[currentTextIndex]}"`;
+        }
+
+        // 开始录制
+        function startRecording() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            
+            recordingTime = 0;
+            recordingTimer = setInterval(() => {
+                recordingTime++;
+                const minutes = Math.floor(recordingTime / 60).toString().padStart(2, '0');
+                const seconds = (recordingTime % 60).toString().padStart(2, '0');
+                document.getElementById('recordProgress').textContent = `录制中... ${minutes}:${seconds}/00:10`;
+                
+                if (recordingTime >= 10) {
+                    finishRecording();
+                }
+            }, 1000);
+        }
+
+        // 完成录制
+        function finishRecording() {
+            clearInterval(recordingTimer);
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'block';
+        }
+
+        // 重新录制
+        function resetRecording() {
+            clearInterval(recordingTimer);
+            resetToStep1();
+        }
+
+        // 完成采集
+        function completeCollection() {
+            const name = document.getElementById('voiceprintName').value.trim();
+            
+            if (!name) {
+                showModal('提示', '请为声纹命名～', () => {
+                    closeModal();
+                });
+                return;
+            }
+            
+            if (name.length < 2 || name.length > 10) {
+                showModal('提示', '声纹名称需要2-10个字符', () => {
+                    closeModal();
+                });
+                return;
+            }
+            
+            // 添加新声纹
+            const newVoiceprint = {
+                id: Date.now(),
+                name: name,
+                createTime: new Date().toISOString().split('T')[0],
+                isDefault: voiceprints.length === 0,
+                deviceCount: 0,
+                agentCount: 0
+            };
+            
+            voiceprints.push(newVoiceprint);
+            
+            showModal('采集成功', '声纹采集完成！可以去关联设备和智能体了～', () => {
+                closeModal();
+                showPage('voiceprintList');
+            });
+        }
+
+        // 删除声纹
+        function deleteVoiceprint(id) {
+            const voiceprint = voiceprints.find(vp => vp.id === id);
+            if (voiceprint) {
+                showModal(
+                    '确认删除',
+                    `确认删除声纹"${voiceprint.name}"？删除后无法恢复，已关联设备/智能体将失效`,
+                    () => {
+                        voiceprints = voiceprints.filter(vp => vp.id !== id);
+                        renderVoiceprintList();
+                        closeModal();
+                    }
+                );
+            }
+        }
+
+        // 编辑声纹名称
+        function editVoiceprintName() {
+            const currentName = document.getElementById('detailVoiceprintName').textContent;
+            const newName = prompt('请输入新的声纹名称:', currentName);
+            
+            if (newName && newName.trim() && newName.trim() !== currentName) {
+                const trimmedName = newName.trim();
+                if (trimmedName.length >= 2 && trimmedName.length <= 10) {
+                    document.getElementById('detailVoiceprintName').textContent = trimmedName;
+                    
+                    // 更新数据
+                    const voiceprint = voiceprints.find(vp => vp.id === currentDetailId);
+                    if (voiceprint) {
+                        voiceprint.name = trimmedName;
+                    }
+                    
+                    showModal('修改成功', '声纹名称已更新', () => {
+                        closeModal();
+                    });
+                } else {
+                    alert('声纹名称需要2-10个字符');
+                }
+            }
+        }
+
+        // 全选/反选
+        function toggleSelectAll(type) {
+            const checkboxes = document.querySelectorAll(`#${type === 'devices' ? 'device' : 'agent'}1, #${type === 'devices' ? 'device' : 'agent'}2, #${type === 'devices' ? 'device' : 'agent'}3`);
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            checkboxes.forEach(cb => {
+                cb.checked = !allChecked;
+            });
+        }
+
+        // 保存关联
+        function saveAssociations() {
+            // 统计关联数量
+            const deviceCheckboxes = document.querySelectorAll('[id^="device"]:checked');
+            const agentCheckboxes = document.querySelectorAll('[id^="agent"]:checked');
+            
+            const deviceCount = deviceCheckboxes.length;
+            const agentCount = agentCheckboxes.length;
+            
+            // 更新显示
+            document.getElementById('deviceCount').textContent = `已关联 ${deviceCount} 台设备`;
+            document.getElementById('agentCount').textContent = `已关联 ${agentCount} 个智能体`;
+            
+            // 更新数据
+            const voiceprint = voiceprints.find(vp => vp.id === currentDetailId);
+            if (voiceprint) {
+                voiceprint.deviceCount = deviceCount;
+                voiceprint.agentCount = agentCount;
+            }
+            
+            showModal('关联成功', '关联成功！快去和智能体聊聊吧～', () => {
+                closeModal();
+            });
+        }
+
+        // 从详情页返回
+        function goBackFromDetail() {
+            showPage('voiceprintList');
+        }
+
+        // 显示声纹选择器
+        function showVoiceprintSelector() {
+            if (voiceprints.length === 0) {
+                showModal('提示', '快去「声纹管理」创建专属声纹吧～', () => {
+                    closeModal();
+                    showPage('voiceprintList');
+                });
+                return;
+            }
+            
+            const selector = document.getElementById('voiceprintSelector');
+            selector.innerHTML = voiceprints.map(vp => `
+                <div class="voiceprint-option ${vp.id === selectedVoiceprint ? 'selected' : ''}" 
+                     onclick="selectVoiceprint(${vp.id})">
+                    <span>${vp.name} ${vp.isDefault ? '(默认)' : ''}</span>
+                    <span>${vp.id === selectedVoiceprint ? '✓' : ''}</span>
+                </div>
+            `).join('');
+            
+            document.getElementById('voiceprintModal').classList.add('active');
+        }
+
+        // 选择声纹
+        function selectVoiceprint(id) {
+            selectedVoiceprint = id;
+            
+            // 更新选中状态
+            document.querySelectorAll('.voiceprint-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.closest('.voiceprint-option').classList.add('selected');
+            
+            // 更新选中标记
+            document.querySelectorAll('.voiceprint-option span:last-child').forEach(span => {
+                span.textContent = '';
+            });
+            event.target.closest('.voiceprint-option').querySelector('span:last-child').textContent = '✓';
+        }
+
+        // 确认声纹选择
+        function confirmVoiceprintSelection() {
+            const selectedVp = voiceprints.find(vp => vp.id === selectedVoiceprint);
+            if (selectedVp) {
+                updateChatVoiceprintStatus();
+                addSystemMessage(`已切换到声纹"${selectedVp.name}"，对话将传递专属身份特征`);
+            }
+            closeVoiceprintModal();
+        }
+
+        // 关闭声纹选择弹窗
+        function closeVoiceprintModal() {
+            document.getElementById('voiceprintModal').classList.remove('active');
+        }
+
+        // 更新聊天页面声纹状态
+        function updateChatVoiceprintStatus() {
+            const selectedVp = voiceprints.find(vp => vp.id === selectedVoiceprint);
+            const toggleBtn = document.querySelector('.voiceprint-toggle');
+            if (selectedVp && toggleBtn) {
+                toggleBtn.innerHTML = `🎵 ${selectedVp.name}`;
+            }
+        }
+
+        // 发送消息
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // 添加用户消息
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // 模拟AI回复
+            setTimeout(() => {
+                const responses = [
+                    'Ho ho ho! 这真是个有趣的话题！',
+                    '根据你的声纹特征，我能感受到你今天心情不错呢！',
+                    '你的声音听起来很温暖，就像圣诞节的炉火一样！',
+                    '让我想想...这个问题很有意思！',
+                    '你知道吗？每个人的声纹都是独一无二的，就像雪花一样！'
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage(randomResponse, 'assistant');
+            }, 1000);
+        }
+
+        // 添加消息
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `<div class="message-bubble">${text}</div>`;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // 添加系统消息
+        function addSystemMessage(text) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message assistant';
+            messageDiv.innerHTML = `<div class="message-bubble" style="background: #e3f2fd; color: #1976d2; font-size: 12px;">${text}</div>`;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // 处理回车键
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // 显示弹窗
+        function showModal(title, text, onConfirm) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalText').textContent = text;
+            pendingAction = onConfirm;
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+            pendingAction = null;
+        }
+
+        // 确认操作
+        function confirmAction() {
+            if (pendingAction) {
+                pendingAction();
+            }
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderVoiceprintList();
+            updateChatVoiceprintStatus();
+            
+            // 添加一些示例对话
+            setTimeout(() => {
+                if (currentPage === 'chatPage') {
+                    addMessage('你好，圣诞老人！', 'user');
+                    setTimeout(() => {
+                        addMessage('Ho ho ho! 你好！很高兴听到你独特的声音！', 'assistant');
+                    }, 500);
+                }
+            }, 1000);
+        });
+
+        // 添加快捷导航
+        function quickNavToChat() {
+            showPage('chatPage');
+        }
+
+        // 添加到对话页面的快捷按钮
+        setTimeout(() => {
+            const myPageMenus = document.querySelector('#myPage .menu-section:last-child');
+            if (myPageMenus) {
+                const chatMenuItem = document.createElement('div');
+                chatMenuItem.className = 'menu-item';
+                chatMenuItem.onclick = () => showPage('chatPage');
+                chatMenuItem.innerHTML = `
+                    <div class="menu-item-left">
+                        <div class="menu-icon">💬</div>
+                        <div>智能体对话</div>
+                    </div>
+                    <div class="arrow-right">›</div>
+                `;
+                myPageMenus.appendChild(chatMenuItem);
+            }
+        }, 100);
+    </script>
+</body>
+</html>
