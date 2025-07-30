@@ -412,6 +412,235 @@
             display: none;
         }
 
+        /* 静态形象样式 */
+        .static-avatar-section {
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .static-avatar-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .static-avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+        }
+
+        .static-avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .static-avatar-info {
+            flex: 1;
+        }
+
+        .static-avatar-desc {
+            color: #374151;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .btn-sync {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-sync:hover {
+            background: #047857;
+        }
+
+        .btn-sync:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .sync-status-text {
+            font-size: 12px;
+            color: #059669;
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
+
+        .sync-status-text.error {
+            color: #dc2626;
+        }
+
+        .dynamic-desc {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 16px;
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .required-note {
+            color: #dc2626;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        .core-status {
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: normal;
+        }
+
+        .validation-status {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .validation-status.warning {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fbbf24;
+            display: block;
+        }
+
+        .validation-status.error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+            display: block;
+        }
+
+        .validation-status.success {
+            background: #f0fdf4;
+            color: #059669;
+            border: 1px solid #86efac;
+            display: block;
+        }
+
+        /* 拖拽叠加样式 */
+        .overlay-canvas {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #f9fafb;
+            margin-top: 12px;
+        }
+
+        .overlay-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .overlay-expression {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 2px solid #4f46e5;
+            border-radius: 4px;
+            cursor: move;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .overlay-expression img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .overlay-expression:hover {
+            border-color: #6366f1;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .overlay-controls {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-auto-adjust {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .device-status {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #92400e;
+            text-align: center;
+        }
+
+        .device-status.error {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #dc2626;
+        }
+
+        .device-status.success {
+            background: #f0fdf4;
+            border-color: #86efac;
+            color: #059669;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .avatar-section {
@@ -425,6 +654,11 @@
             
             .expression-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .static-avatar-container {
+                flex-direction: column;
+                text-align: center;
             }
         }
     </style>
@@ -576,6 +810,7 @@
                                     <div class="device-screen">
                                         <img class="device-background" id="preview-bg" style="display: none;">
                                         <img class="device-expression" id="preview-expression" style="display: none;">
+                                        <img class="device-static" id="preview-static" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjI0MCIgdmlld0JveD0iMCAwIDE2MCAyNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNjAiIGhlaWdodD0iMjQwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjgwIiB5PSIxMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzZCNzI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+6Z2Z5oCB5b2i6LGhPC90ZXh0Pgo8L3N2Zz4K" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 </div>
                                 <div class="preview-controls">
@@ -583,8 +818,27 @@
                                     <button class="preview-btn" onclick="switchPreview('listen')">聆听</button>
                                     <button class="preview-btn" onclick="switchPreview('answer')">回答</button>
                                 </div>
+                                <div class="device-status" id="device-status">
+                                    动态形象资源不全，当前加载静态形象
+                                </div>
                                 <div class="sync-status" id="sync-status" style="display: none;">
                                     配置已保存，等待同步到玩具端...
+                                </div>
+                            </div>
+
+                            <!-- 叠加效果配置 -->
+                            <div class="form-group" style="margin-top: 24px;">
+                                <label class="form-label">叠加效果预览</label>
+                                <div class="overlay-canvas" id="overlay-canvas">
+                                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #9ca3af;">
+                                        上传背景图和表情动图后可预览叠加效果
+                                    </div>
+                                </div>
+                                <div class="overlay-controls">
+                                    <button class="btn-auto-adjust" onclick="autoAdjustOverlay()" style="display: none;" id="auto-adjust-btn">
+                                        🔧 自动调整尺寸
+                                    </button>
+                                    <button class="preview-btn" onclick="resetOverlayPosition()">重置位置</button>
                                 </div>
                             </div>
                         </div>
@@ -621,7 +875,16 @@
             idle: null
         };
 
+        // 叠加位置配置
+        const overlayPositions = {
+            listen: { x: 50, y: 140 },
+            answer: { x: 50, y: 140 },
+            idle: { x: 50, y: 140 }
+        };
+
         let currentPreview = 'idle';
+        let isDragging = false;
+        let dragOffset = { x: 0, y: 0 };
 
         // 打开弹窗
         function openModal() {
@@ -644,6 +907,51 @@
             document.getElementById(tabName + '-panel').classList.add('active');
         }
 
+        // 同步COZE封面
+        function syncCozeAvatar() {
+            const syncBtn = document.getElementById('sync-btn');
+            const syncIcon = document.getElementById('sync-icon');
+            const syncText = document.getElementById('sync-status-text');
+            const staticAvatar = document.getElementById('static-avatar');
+            
+            // 开始同步
+            syncBtn.disabled = true;
+            syncIcon.innerHTML = '<span class="loading-spinner"></span>';
+            syncText.textContent = '同步中...';
+            syncText.className = 'sync-status-text';
+            
+            // 模拟同步过程
+            setTimeout(() => {
+                // 随机决定成功或失败（演示用）
+                const success = Math.random() > 0.3;
+                
+                if (success) {
+                    // 更新静态头像（模拟新的COZE封面）
+                    const newAvatarUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iMTAiIGZpbGw9IiM0RjQ2RTUiLz4KPGV0ZXh0IHg9IjYwIiB5PSI2NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+5paw5bCB6Z2iPC90ZXh0Pgo8L3N2Zz4K';
+                    staticAvatar.src = newAvatarUrl;
+                    
+                    syncIcon.innerHTML = '✅';
+                    syncText.textContent = '已同步最新COZE平台封面';
+                    syncText.className = 'sync-status-text';
+                } else {
+                    syncIcon.innerHTML = '❌';
+                    syncText.textContent = '同步失败，请检查网络或稍后重试';
+                    syncText.className = 'sync-status-text error';
+                }
+                
+                syncBtn.disabled = false;
+                
+                // 3秒后恢复初始状态
+                setTimeout(() => {
+                    syncIcon.innerHTML = '🔄';
+                    if (success) {
+                        syncText.textContent = '已同步最新COZE平台封面';
+                        syncText.className = 'sync-status-text';
+                    }
+                }, 3000);
+            }, 2000);
+        }
+
         // 触发文件上传
         function triggerFileUpload(type) {
             document.getElementById(type + '-file').click();
@@ -653,6 +961,13 @@
         function handleFileUpload(type, input) {
             const file = input.files[0];
             if (!file) return;
+
+            // 文件格式验证
+            const validTypes = type === 'bg' ? ['image/jpeg', 'image/png'] : ['image/gif', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+                alert(`请上传正确格式的文件：${type === 'bg' ? 'JPG, PNG' : 'GIF, WebP'}`);
+                return;
+            }
 
             uploadedFiles[type] = file;
             
@@ -667,10 +982,185 @@
                     uploadSection.classList.add('has-file');
                 }
 
-                // 更新预览
+                // 更新预览和验证
                 updatePreview();
+                validateDynamicResources();
+                updateOverlayCanvas();
             };
             reader.readAsDataURL(file);
+        }
+
+        // 验证动态资源完整性
+        function validateDynamicResources() {
+            const validationStatus = document.getElementById('validation-status');
+            const hasBackground = uploadedFiles.bg !== null;
+            const expressionCount = [uploadedFiles.listen, uploadedFiles.answer, uploadedFiles.idle].filter(f => f !== null).length;
+            const hasCoreExpressions = uploadedFiles.listen !== null && uploadedFiles.idle !== null;
+            
+            if (!hasBackground && expressionCount === 0) {
+                validationStatus.className = 'validation-status';
+                validationStatus.style.display = 'none';
+                return;
+            }
+            
+            if (hasBackground && expressionCount === 0) {
+                validationStatus.className = 'validation-status warning';
+                validationStatus.innerHTML = '⚠️ 动态形象需至少上传1个表情动图，否则将默认加载静态形象';
+            } else if (expressionCount > 0 && !hasCoreExpressions) {
+                validationStatus.className = 'validation-status warning';
+                validationStatus.innerHTML = '⚠️ 建议上传核心状态表情（聆听和待机），以获得完整交互体验';
+            } else if (hasBackground && expressionCount > 0) {
+                validationStatus.className = 'validation-status success';
+                validationStatus.innerHTML = '✅ 动态形象资源配置完整';
+            } else {
+                validationStatus.className = 'validation-status warning';
+                validationStatus.innerHTML = '⚠️ 建议同时上传背景图和表情动图以获得最佳效果';
+            }
+        }
+
+        // 更新叠加画布
+        function updateOverlayCanvas() {
+            const canvas = document.getElementById('overlay-canvas');
+            const hasBackground = uploadedFiles.bg !== null;
+            const hasExpressions = [uploadedFiles.listen, uploadedFiles.answer, uploadedFiles.idle].some(f => f !== null);
+            
+            if (!hasBackground && !hasExpressions) {
+                canvas.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #9ca3af;">上传背景图和表情动图后可预览叠加效果</div>';
+                return;
+            }
+            
+            canvas.innerHTML = '';
+            
+            // 添加背景图
+            if (hasBackground) {
+                const bgImg = document.createElement('img');
+                bgImg.className = 'overlay-background';
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    bgImg.src = e.target.result;
+                };
+                reader.readAsDataURL(uploadedFiles.bg);
+                canvas.appendChild(bgImg);
+            }
+            
+            // 添加表情动图
+            ['listen', 'answer', 'idle'].forEach((type, index) => {
+                if (uploadedFiles[type]) {
+                    const expImg = document.createElement('div');
+                    expImg.className = 'overlay-expression';
+                    expImg.style.left = overlayPositions[type].x + 'px';
+                    expImg.style.top = overlayPositions[type].y + 'px';
+                    expImg.setAttribute('data-type', type);
+                    
+                    const img = document.createElement('img');
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(uploadedFiles[type]);
+                    
+                    expImg.appendChild(img);
+                    canvas.appendChild(expImg);
+                    
+                    // 添加拖拽功能
+                    addDragFunctionality(expImg);
+                }
+            });
+            
+            // 显示自动调整按钮
+            if (hasBackground && hasExpressions) {
+                document.getElementById('auto-adjust-btn').style.display = 'inline-block';
+            }
+        }
+
+        // 添加拖拽功能
+        function addDragFunctionality(element) {
+            element.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                const rect = element.getBoundingClientRect();
+                const canvasRect = document.getElementById('overlay-canvas').getBoundingClientRect();
+                dragOffset.x = e.clientX - rect.left;
+                dragOffset.y = e.clientY - rect.top;
+                element.style.zIndex = '1000';
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                const canvas = document.getElementById('overlay-canvas');
+                const canvasRect = canvas.getBoundingClientRect();
+                const x = e.clientX - canvasRect.left - dragOffset.x;
+                const y = e.clientY - canvasRect.top - dragOffset.y;
+                
+                // 限制在画布范围内
+                const maxX = canvas.offsetWidth - element.offsetWidth;
+                const maxY = canvas.offsetHeight - element.offsetHeight;
+                
+                const boundedX = Math.max(0, Math.min(x, maxX));
+                const boundedY = Math.max(0, Math.min(y, maxY));
+                
+                element.style.left = boundedX + 'px';
+                element.style.top = boundedY + 'px';
+                
+                // 更新位置配置
+                const type = element.getAttribute('data-type');
+                overlayPositions[type] = { x: boundedX, y: boundedY };
+            });
+            
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    element.style.zIndex = '';
+                    checkOverlayConflict();
+                }
+            });
+        }
+
+        // 检查叠加冲突
+        function checkOverlayConflict() {
+            const validationStatus = document.getElementById('validation-status');
+            // 简单的冲突检测逻辑（可以更复杂）
+            const positions = Object.values(overlayPositions);
+            let hasConflict = false;
+            
+            for (let i = 0; i < positions.length - 1; i++) {
+                for (let j = i + 1; j < positions.length; j++) {
+                    const dist = Math.sqrt(Math.pow(positions[i].x - positions[j].x, 2) + Math.pow(positions[i].y - positions[j].y, 2));
+                    if (dist < 50) { // 如果距离太近
+                        hasConflict = true;
+                        break;
+                    }
+                }
+                if (hasConflict) break;
+            }
+            
+            if (hasConflict) {
+                validationStatus.className = 'validation-status warning';
+                validationStatus.innerHTML = '⚠️ 表情动图与背景图叠加后可能影响识别，建议调整位置或尺寸';
+            }
+        }
+
+        // 自动调整叠加
+        function autoAdjustOverlay() {
+            // 重置到默认安全位置
+            overlayPositions.listen = { x: 20, y: 140 };
+            overlayPositions.answer = { x: 70, y: 140 };
+            overlayPositions.idle = { x: 120, y: 140 };
+            
+            updateOverlayCanvas();
+            
+            const validationStatus = document.getElementById('validation-status');
+            validationStatus.className = 'validation-status success';
+            validationStatus.innerHTML = '✅ 已自动调整到最佳位置';
+        }
+
+        // 重置叠加位置
+        function resetOverlayPosition() {
+            overlayPositions.listen = { x: 50, y: 140 };
+            overlayPositions.answer = { x: 50, y: 140 };
+            overlayPositions.idle = { x: 50, y: 140 };
+            
+            updateOverlayCanvas();
         }
 
         // 切换预览状态
@@ -687,32 +1177,67 @@
         function updatePreview() {
             const bgImg = document.getElementById('preview-bg');
             const expressionImg = document.getElementById('preview-expression');
+            const staticImg = document.getElementById('preview-static');
+            const deviceStatus = document.getElementById('device-status');
             
-            // 更新背景
-            if (uploadedFiles.bg) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
+            const hasBackground = uploadedFiles.bg !== null;
+            const hasCurrentExpression = uploadedFiles[currentPreview] !== null;
+            const hasAnyExpression = [uploadedFiles.listen, uploadedFiles.answer, uploadedFiles.idle].some(f => f !== null);
+            
+            // 判断显示逻辑
+            if (hasBackground && hasAnyExpression) {
+                // 显示动态形象
+                staticImg.style.display = 'none';
+                
+                // 更新背景
+                const reader1 = new FileReader();
+                reader1.onload = function(e) {
                     bgImg.src = e.target.result;
                     bgImg.style.display = 'block';
                 };
-                reader.readAsDataURL(uploadedFiles.bg);
-            }
-            
-            // 更新表情
-            if (uploadedFiles[currentPreview]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    expressionImg.src = e.target.result;
-                    expressionImg.style.display = 'block';
-                };
-                reader.readAsDataURL(uploadedFiles[currentPreview]);
+                reader1.readAsDataURL(uploadedFiles.bg);
+                
+                // 更新表情
+                if (hasCurrentExpression) {
+                    const reader2 = new FileReader();
+                    reader2.onload = function(e) {
+                        expressionImg.src = e.target.result;
+                        expressionImg.style.display = 'block';
+                        expressionImg.style.left = overlayPositions[currentPreview].x * 0.5 + 'px'; // 缩放到设备尺寸
+                        expressionImg.style.top = overlayPositions[currentPreview].y * 0.6 + 'px';
+                    };
+                    reader2.readAsDataURL(uploadedFiles[currentPreview]);
+                    
+                    deviceStatus.className = 'device-status success';
+                    deviceStatus.textContent = `✅ 动态形象加载成功 - 当前状态：${currentPreview === 'listen' ? '聆听' : currentPreview === 'answer' ? '回答' : '待机'}`;
+                } else {
+                    expressionImg.style.display = 'none';
+                    deviceStatus.className = 'device-status error';
+                    deviceStatus.textContent = `❌ 缺少${currentPreview === 'listen' ? '聆听' : currentPreview === 'answer' ? '回答' : '待机'}表情动图`;
+                }
             } else {
+                // 显示静态形象
+                bgImg.style.display = 'none';
                 expressionImg.style.display = 'none';
+                staticImg.style.display = 'block';
+                
+                if (!hasBackground && !hasAnyExpression) {
+                    deviceStatus.className = 'device-status';
+                    deviceStatus.textContent = '动态形象资源不全，当前加载静态形象';
+                } else if (!hasBackground) {
+                    deviceStatus.className = 'device-status error';
+                    deviceStatus.textContent = '❌ 缺少背景图片，当前加载静态形象';
+                } else {
+                    deviceStatus.className = 'device-status error';
+                    deviceStatus.textContent = '❌ 缺少表情动图，当前加载静态形象';
+                }
             }
         }
 
         // 保存配置
         function saveConfig() {
+            validateDynamicResources();
+            
             const syncStatus = document.getElementById('sync-status');
             syncStatus.style.display = 'block';
             syncStatus.innerHTML = '✅ 配置已保存成功！';
@@ -738,6 +1263,9 @@
                 syncStatus.style.background = '#d1fae5';
                 syncStatus.style.color = '#065f46';
                 
+                // 更新设备状态
+                updatePreview();
+                
                 setTimeout(() => {
                     syncStatus.style.display = 'none';
                 }, 3000);
@@ -756,6 +1284,11 @@
             if (e.key === 'Escape') {
                 closeModal();
             }
+        });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePreview();
         });
     </script>
 </body>
