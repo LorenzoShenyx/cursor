@@ -495,10 +495,30 @@
 
                 <!-- 形象管理Tab -->
                 <div class="tab-panel" id="avatar-panel">
+                    <!-- 静态形象区（必填） -->
+                    <div class="static-avatar-section">
+                        <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600; color: #dc2626;">
+                            <span style="color: #dc2626;">*</span> 静态形象（必填）
+                        </h3>
+                        <div class="static-avatar-container">
+                            <div class="static-avatar-preview">
+                                <img id="static-avatar" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iMTAiIGZpbGw9IiNGM0Y0RjYiLz4KPGV0ZXh0IHg9IjYwIiB5PSI2NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNkI3MjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5DT1pF5bCB6Z2iPC90ZXh0Pgo8L3N2Zz4K" alt="COZE封面">
+                            </div>
+                            <div class="static-avatar-info">
+                                <p class="static-avatar-desc">静态形象为必填项，同步自COZE平台，作为动态形象加载兜底</p>
+                                <button class="btn-sync" onclick="syncCozeAvatar()" id="sync-btn">
+                                    <span id="sync-icon">🔄</span> 重新同步COZE封面
+                                </button>
+                                <p class="sync-status-text" id="sync-status-text">已同步最新COZE平台封面</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="avatar-section">
                         <!-- 左侧：动态形象配置 -->
                         <div>
-                            <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600;">动态形象配置</h3>
+                            <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 600;">动态形象配置（可选增强）</h3>
+                            <p class="dynamic-desc">可选配置，提升交互丰富性。表情动图将叠加在背景图上，可拖拽调整位置。</p>
                             
                             <!-- 背景图上传 -->
                             <div class="form-group">
@@ -515,10 +535,10 @@
 
                             <!-- 表情动图组 -->
                             <div class="form-group">
-                                <label class="form-label">表情动图</label>
+                                <label class="form-label">表情动图 <span class="required-note">（至少上传1个表情动图）</span></label>
                                 <div class="expression-grid">
                                     <div class="expression-item">
-                                        <div class="expression-label">聆听表情</div>
+                                        <div class="expression-label">聆听表情 <span class="core-status">核心</span></div>
                                         <div class="expression-preview" id="listen-preview">
                                             <div class="upload-placeholder">👂</div>
                                         </div>
@@ -536,7 +556,7 @@
                                     </div>
                                     
                                     <div class="expression-item">
-                                        <div class="expression-label">待机表情</div>
+                                        <div class="expression-label">待机表情 <span class="core-status">核心</span></div>
                                         <div class="expression-preview" id="idle-preview">
                                             <div class="upload-placeholder">😊</div>
                                         </div>
@@ -544,6 +564,7 @@
                                         <input type="file" class="file-input" id="idle-file" accept="image/gif,image/webp" onchange="handleFileUpload('idle', this)">
                                     </div>
                                 </div>
+                                <div class="validation-status" id="validation-status"></div>
                             </div>
                         </div>
 
