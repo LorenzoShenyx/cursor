@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玩具端预览</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>正超云平台</h2>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <span>智能体管理</span>
+                </div>
+                <div class="nav-item active">
+                    <span>智能体列表</span>
+                </div>
+                <div class="nav-item">
+                    <span>力量管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>分类管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>智能体管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>群聊管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>消息监管</span>
+                </div>
+                <div class="nav-item">
+                    <span>用户管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>商品管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>订单管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>财务管理</span>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 头部 -->
+            <div class="header">
+                <div class="header-left">
+                    <h1>玩具端预览</h1>
+                    <div class="breadcrumb">
+                        <span>智能体列表</span>
+                        <span> > </span>
+                        <span>形象管理</span>
+                        <span> > </span>
+                        <span>玩具端预览</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-secondary" onclick="goBackToAvatarManagement()">返回形象管理</button>
+                    <div class="user-info">
+                        <span>你好管理员</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 预览内容 -->
+            <div class="preview-container">
+                <div class="preview-info">
+                    <h3>玩具屏幕模拟</h3>
+                    <p>以下展示智能体在玩具设备上的实际显示效果</p>
+                </div>
+
+                <!-- 玩具屏幕模拟器 -->
+                <div class="toy-screen-simulator">
+                    <div class="toy-device">
+                        <div class="toy-screen">
+                            <!-- 玩具形象展示动态面板 -->
+                            <div class="toy-avatar-container">
+                                <!-- 状态1: 静态形象展示 -->
+                                <div id="toy-static-display" class="toy-display-state active">
+                                    <div class="toy-avatar-wrapper">
+                                        <img id="toy-static-avatar" src="https://via.placeholder.com/200x200/4F46E5/white?text=AI" alt="静态形象">
+                                        <div class="toy-status-text">当前为静态形象</div>
+                                    </div>
+                                </div>
+
+                                <!-- 状态2: 动态形象展示 -->
+                                <div id="toy-dynamic-display" class="toy-display-state">
+                                    <div class="toy-dynamic-wrapper">
+                                        <div class="toy-background">
+                                            <img id="toy-background-img" src="https://via.placeholder.com/400x300/10B981/white?text=Background" alt="背景图">
+                                        </div>
+                                        <div class="toy-emotion-overlay">
+                                            <img id="toy-emotion-img" src="https://via.placeholder.com/150x150/F59E0B/white?text=🎧" alt="表情动图">
+                                        </div>
+                                        <div class="toy-status-text">当前为动态形象</div>
+                                        <div class="toy-emotion-status" id="emotion-status">聆听状态</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 玩具屏幕底部信息 -->
+                            <div class="toy-screen-footer">
+                                <div class="agent-name" id="toy-agent-name">智能助手</div>
+                                <div class="connection-status">已连接</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 控制面板 -->
+                    <div class="preview-controls">
+                        <h4>预览控制</h4>
+                        <div class="control-group">
+                            <label>显示模式：</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="display-mode" value="static" checked onchange="switchDisplayMode('static')">
+                                    <span>静态形象</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="display-mode" value="dynamic" onchange="switchDisplayMode('dynamic')">
+                                    <span>动态形象</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="control-group" id="emotion-controls" style="display: none;">
+                            <label>表情状态：</label>
+                            <div class="emotion-buttons">
+                                <button class="btn btn-small" onclick="switchEmotion('listening')">聆听</button>
+                                <button class="btn btn-small" onclick="switchEmotion('speaking')">回答</button>
+                                <button class="btn btn-small" onclick="switchEmotion('standby')">待机</button>
+                                <button class="btn btn-small" onclick="switchEmotion('idle')">空闲</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label>自动演示：</label>
+                            <button class="btn btn-secondary" id="auto-demo-btn" onclick="toggleAutoDemo()">开始演示</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 配置信息展示 -->
+                <div class="config-info">
+                    <h4>当前配置信息</h4>
+                    <div class="config-details">
+                        <div class="config-item">
+                            <span class="config-label">智能体名称：</span>
+                            <span class="config-value" id="config-agent-name">智能助手</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">动态形象状态：</span>
+                            <span class="config-value" id="config-dynamic-status">已关闭</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">资源完整性：</span>
+                            <span class="config-value" id="config-resource-status">不完整</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">加载策略：</span>
+                            <span class="config-value" id="config-load-strategy">静态形象优先</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示弹窗 -->
+    <div id="toast" class="toast"></div>
+
+    <script src="toy-preview-script.js"></script>
+</body>
+</html>
