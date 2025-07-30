@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能体动态形象管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .agent-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+        }
+
+        .main-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .section {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e8f2ff;
+        }
+
+        .section h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            background: #4facfe;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .upload-area {
+            border: 2px dashed #4facfe;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: #00f2fe;
+            background: #f0f9ff;
+        }
+
+        .upload-area.has-file {
+            border-color: #4caf50;
+            background: #f0fff0;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #4facfe;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .upload-hint {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .expression-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .expression-item {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .expression-item:hover {
+            border-color: #4facfe;
+        }
+
+        .expression-item.active {
+            border-color: #4facfe;
+            background: #f0f9ff;
+        }
+
+        .expression-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .preview-panel {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e8f2ff;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .preview-screen {
+            background: #000;
+            border-radius: 12px;
+            aspect-ratio: 3/4;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 3px solid #333;
+        }
+
+        .preview-content {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .state-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .state-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #4facfe;
+            background: white;
+            color: #4facfe;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .state-btn.active {
+            background: #4facfe;
+            color: white;
+        }
+
+        .state-btn:hover {
+            background: #4facfe;
+            color: white;
+        }
+
+        .save-section {
+            border-top: 1px solid #e8f2ff;
+            padding-top: 20px;
+        }
+
+        .save-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        .status-success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+
+        .status-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+
+        .tips {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .tips h4 {
+            color: #f57c00;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .tips ul {
+            color: #e65100;
+            font-size: 12px;
+            padding-left: 20px;
+        }
+
+        .tips li {
+            margin-bottom: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .modal-success {
+            color: #4caf50;
+        }
+
+        .modal-error {
+            color: #f44336;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .modal-text {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .modal-btn {
+            background: #4facfe;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .preview-panel {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="goBack()">← 返回</button>
+                <h1>智能体动态形象管理</h1>
+            </div>
+            <div class="agent-info">
+                <div id="agent-name">小智学习助手 (AI-001)</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="main-panel">
+                <!-- 背景图上传 -->
+                <div class="section">
+                    <h3><span class="section-icon">🖼</span>背景图设置</h3>
+                    <div class="upload-area" onclick="triggerFileInput('background')">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">点击上传背景图</div>
+                        <div class="upload-hint">支持 JPG、PNG 格式，建议尺寸 800x600</div>
+                        <input type="file" class="file-input" id="background-input" accept="image/*" onchange="handleFileUpload(this, 'background')">
+                    </div>
+                </div>
+
+                <!-- 表情动图上传 -->
+                <div class="section">
+                    <h3><span class="section-icon">😊</span>表情动图配置</h3>
+                    <div class="expression-grid">
+                        <div class="expression-item" data-state="listening">
+                            <div class="expression-label">聆听表情</div>
+                            <div class="upload-area" onclick="triggerFileInput('listening')">
+                                <div class="upload-icon">🎧</div>
+                                <div class="upload-text">上传聆听动图</div>
+                                <div class="upload-hint">GIF 格式，建议 200x200</div>
+                                <input type="file" class="file-input" id="listening-input" accept="image/gif,image/*" onchange="handleFileUpload(this, 'listening')">
+                            </div>
+                        </div>
+
+                        <div class="expression-item" data-state="speaking">
+                            <div class="expression-label">回答表情</div>
+                            <div class="upload-area" onclick="triggerFileInput('speaking')">
+                                <div class="upload-icon">💬</div>
+                                <div class="upload-text">上传回答动图</div>
+                                <div class="upload-hint">GIF 格式，建议 200x200</div>
+                                <input type="file" class="file-input" id="speaking-input" accept="image/gif,image/*" onchange="handleFileUpload(this, 'speaking')">
+                            </div>
+                        </div>
+
+                        <div class="expression-item" data-state="idle">
+                            <div class="expression-label">待机表情</div>
+                            <div class="upload-area" onclick="triggerFileInput('idle')">
+                                <div class="upload-icon">😴</div>
+                                <div class="upload-text">上传待机动图</div>
+                                <div class="upload-hint">GIF 格式，建议 200x200</div>
+                                <input type="file" class="file-input" id="idle-input" accept="image/gif,image/*" onchange="handleFileUpload(this, 'idle')">
+                            </div>
+                        </div>
+
+                        <div class="expression-item" data-state="loading">
+                            <div class="expression-label">加载静态图</div>
+                            <div class="upload-area" onclick="triggerFileInput('loading')">
+                                <div class="upload-icon">⏳</div>
+                                <div class="upload-text">上传加载图片</div>
+                                <div class="upload-hint">PNG 格式，建议 200x200</div>
+                                <input type="file" class="file-input" id="loading-input" accept="image/*" onchange="handleFileUpload(this, 'loading')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tips">
+                        <h4>💡 上传提示</h4>
+                        <ul>
+                            <li>动图文件大小建议不超过 2MB</li>
+                            <li>建议动图帧数控制在 10-30 帧之间</li>
+                            <li>表情动图会根据智能体状态自动切换</li>
+                            <li>上传后可点击右侧状态按钮预览效果</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 预览面板 -->
+            <div class="preview-panel">
+                <h3><span class="section-icon">📱</span>玩具端预览</h3>
+                
+                <div class="preview-screen">
+                    <div class="preview-content" id="preview-content">
+                        <div>点击上传资源预览效果</div>
+                    </div>
+                </div>
+
+                <div class="state-buttons">
+                    <button class="state-btn active" data-state="listening" onclick="switchPreviewState('listening')">聆听</button>
+                    <button class="state-btn" data-state="speaking" onclick="switchPreviewState('speaking')">回答</button>
+                    <button class="state-btn" data-state="idle" onclick="switchPreviewState('idle')">待机</button>
+                </div>
+
+                <div class="save-section">
+                    <button class="save-btn" onclick="saveConfiguration()">保存并同步到玩具端</button>
+                    <button class="save-btn" onclick="openToyPreview()" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); margin-top: 10px;">
+                        打开玩具端预览
+                    </button>
+                    <div class="status-message" id="status-message"></div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: #f0f9ff; border-radius: 8px; font-size: 12px; color: #666;">
+                    <strong>同步状态：</strong><br>
+                    • 背景图：<span id="bg-status">未上传</span><br>
+                    • 聆听表情：<span id="listening-status">未上传</span><br>
+                    • 回答表情：<span id="speaking-status">未上传</span><br>
+                    • 待机表情：<span id="idle-status">未上传</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-icon" id="modal-icon">✅</div>
+            <div class="modal-title" id="modal-title">保存成功</div>
+            <div class="modal-text" id="modal-text">动态形象已成功保存并同步至玩具端！</div>
+            <button class="modal-btn" onclick="closeModal()">确定</button>
+        </div>
+    </div>
+
+    <script>
+        // 全局状态管理
+        const state = {
+            currentPreview: 'listening',
+            uploads: {
+                background: null,
+                listening: null,
+                speaking: null,
+                idle: null,
+                loading: null
+            }
+        };
+
+        // 获取URL参数
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // 初始化页面
+        function initPage() {
+            const agentId = getUrlParam('id') || 'AI-001';
+            const agentNames = {
+                'AI-001': '小智学习助手',
+                'AI-002': '娱乐陪伴机器人',
+                'AI-003': '生活助理',
+                'AI-004': '健康顾问',
+                'AI-005': '语言学习伙伴',
+                'AI-006': '故事讲述者'
+            };
+            
+            document.getElementById('agent-name').textContent = 
+                `${agentNames[agentId] || '未知智能体'} (${agentId})`;
+        }
+
+        // 返回上一页
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // 触发文件选择
+        function triggerFileInput(type) {
+            document.getElementById(`${type}-input`).click();
+        }
+
+        // 处理文件上传
+        function handleFileUpload(input, type) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // 文件大小检查
+            if (file.size > 5 * 1024 * 1024) {
+                showModal('error', '文件过大', '文件大小不能超过 5MB，请压缩后重试！');
+                return;
+            }
+
+            // 文件类型检查
+            if (type !== 'loading' && !file.type.includes('image/')) {
+                showModal('error', '文件格式错误', '请上传正确的图片格式文件！');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                state.uploads[type] = e.target.result;
+                updateUploadUI(type, e.target.result, file.name);
+                updatePreview();
+                updateSyncStatus(type, '已上传');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 更新上传UI
+        function updateUploadUI(type, dataUrl, fileName) {
+            const uploadArea = document.querySelector(`#${type}-input`).parentElement;
+            uploadArea.classList.add('has-file');
+            
+            // 清除原有内容
+            uploadArea.innerHTML = '';
+            
+            // 添加预览图片
+            const img = document.createElement('img');
+            img.src = dataUrl;
+            img.className = 'preview-image';
+            img.alt = fileName;
+            
+            const fileInfo = document.createElement('div');
+            fileInfo.style.marginTop = '10px';
+            fileInfo.style.fontSize = '12px';
+            fileInfo.style.color = '#666';
+            fileInfo.textContent = `已上传：${fileName}`;
+            
+            const reuploadBtn = document.createElement('button');
+            reuploadBtn.textContent = '重新上传';
+            reuploadBtn.style.marginTop = '10px';
+            reuploadBtn.style.padding = '5px 10px';
+            reuploadBtn.style.fontSize = '12px';
+            reuploadBtn.style.background = '#4facfe';
+            reuploadBtn.style.color = 'white';
+            reuploadBtn.style.border = 'none';
+            reuploadBtn.style.borderRadius = '4px';
+            reuploadBtn.style.cursor = 'pointer';
+            reuploadBtn.onclick = (e) => {
+                e.stopPropagation();
+                triggerFileInput(type);
+            };
+            
+            uploadArea.appendChild(img);
+            uploadArea.appendChild(fileInfo);
+            uploadArea.appendChild(reuploadBtn);
+            
+            // 重新绑定点击事件
+            uploadArea.onclick = () => triggerFileInput(type);
+        }
+
+        // 切换预览状态
+        function switchPreviewState(newState) {
+            state.currentPreview = newState;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.state-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-state="${newState}"]`).classList.add('active');
+            
+            updatePreview();
+        }
+
+        // 更新预览
+        function updatePreview() {
+            const previewContent = document.getElementById('preview-content');
+            const background = state.uploads.background;
+            const expression = state.uploads[state.currentPreview];
+            
+            if (background) {
+                previewContent.style.backgroundImage = `url(${background})`;
+                previewContent.innerHTML = '';
+                
+                if (expression) {
+                    const expressionImg = document.createElement('img');
+                    expressionImg.src = expression;
+                    expressionImg.style.maxWidth = '120px';
+                    expressionImg.style.maxHeight = '120px';
+                    expressionImg.style.borderRadius = '8px';
+                    expressionImg.style.border = '2px solid white';
+                    previewContent.appendChild(expressionImg);
+                }
+            } else if (expression) {
+                previewContent.style.backgroundImage = 'none';
+                previewContent.innerHTML = `<img src="${expression}" style="max-width: 120px; max-height: 120px; border-radius: 8px;">`;
+            } else {
+                previewContent.style.backgroundImage = 'none';
+                previewContent.innerHTML = `<div style="color: #ccc;">请上传${getStateText(state.currentPreview)}资源</div>`;
+            }
+        }
+
+        // 获取状态文本
+        function getStateText(state) {
+            const texts = {
+                listening: '聆听表情',
+                speaking: '回答表情',
+                idle: '待机表情',
+                loading: '加载图片'
+            };
+            return texts[state] || state;
+        }
+
+        // 更新同步状态
+        function updateSyncStatus(type, status) {
+            const statusMap = {
+                background: 'bg-status',
+                listening: 'listening-status',
+                speaking: 'speaking-status',
+                idle: 'idle-status'
+            };
+            
+            const statusElement = document.getElementById(statusMap[type]);
+            if (statusElement) {
+                statusElement.textContent = status;
+                statusElement.style.color = status === '已上传' ? '#4caf50' : '#666';
+            }
+        }
+
+        // 保存配置
+        function saveConfiguration() {
+            const uploadedCount = Object.values(state.uploads).filter(upload => upload !== null).length;
+            
+            if (uploadedCount === 0) {
+                showModal('error', '保存失败', '请至少上传一个资源文件！');
+                return;
+            }
+
+            // 保存到localStorage供玩具端预览使用
+            localStorage.setItem('avatarResources', JSON.stringify(state.uploads));
+
+            // 模拟保存过程
+            const saveBtn = document.querySelector('.save-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = '保存中...';
+
+            setTimeout(() => {
+                saveBtn.disabled = false;
+                saveBtn.textContent = '保存并同步到玩具端';
+                
+                // 随机模拟成功或失败
+                const success = Math.random() > 0.1; // 90% 成功率
+                
+                if (success) {
+                    showModal('success', '保存成功', `动态形象配置已成功保存！\n已上传 ${uploadedCount} 个资源文件，正在同步至玩具端...`);
+                    
+                    // 模拟同步过程
+                    setTimeout(() => {
+                        showModal('success', '同步完成', '所有资源已成功同步至玩具端，智能体形象更新完成！');
+                    }, 2000);
+                } else {
+                    showModal('error', '同步失败', '玩具端连接异常，请检查网络连接后重试！');
+                }
+            }, 1500);
+        }
+
+        // 打开玩具端预览
+        function openToyPreview() {
+            // 保存当前状态到localStorage
+            localStorage.setItem('avatarResources', JSON.stringify(state.uploads));
+            
+            // 在新窗口打开玩具端预览
+            window.open('toy-preview.html', '_blank', 'width=800,height=600');
+        }
+
+        // 显示模态框
+        function showModal(type, title, text) {
+            const modal = document.getElementById('modal');
+            const icon = document.getElementById('modal-icon');
+            const titleEl = document.getElementById('modal-title');
+            const textEl = document.getElementById('modal-text');
+            
+            if (type === 'success') {
+                icon.textContent = '✅';
+                icon.className = 'modal-icon modal-success';
+            } else {
+                icon.textContent = '❌';
+                icon.className = 'modal-icon modal-error';
+            }
+            
+            titleEl.textContent = title;
+            textEl.textContent = text;
+            modal.style.display = 'flex';
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
