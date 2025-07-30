@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玩具端预览 - 芷间云平台</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="platform-name">芷间云平台</h1>
+                <span class="module-name">玩具端预览</span>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="avatar">👤</div>
+                    <span>超级管理员</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- 左侧导航栏 -->
+            <nav class="sidebar">
+                <div class="nav-item active">
+                    <span>📱</span>
+                    <span>智能体管理</span>
+                </div>
+                <div class="nav-sub-item active">
+                    <span>🤖</span>
+                    <span>智能体</span>
+                </div>
+                <div class="nav-item">
+                    <span>🏢</span>
+                    <span>租户管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📋</span>
+                    <span>方案管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📄</span>
+                    <span>模板管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📂</span>
+                    <span>分类管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📜</span>
+                    <span>脚本管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📦</span>
+                    <span>产品管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>🔔</span>
+                    <span>通知消息</span>
+                </div>
+                <div class="nav-item">
+                    <span>💰</span>
+                    <span>财务管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>🎵</span>
+                    <span>音色管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>⚙️</span>
+                    <span>系统管理</span>
+                </div>
+            </nav>
+
+            <!-- 主要内容区域 -->
+            <main class="content">
+                <!-- 页面标题和返回按钮 -->
+                <div class="page-header">
+                    <button class="btn btn-secondary" onclick="goBack()">← 返回形象管理</button>
+                    <h2>玩具端预览</h2>
+                    <div class="agent-info-header">
+                        <div class="agent-avatar">🤖</div>
+                        <div class="agent-details">
+                            <div class="agent-name" id="previewAgentName">123123</div>
+                            <div class="agent-id" id="previewAgentId">ID: 1001</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 玩具屏幕模拟 -->
+                <div class="toy-screen-container">
+                    <div class="toy-screen">
+                        <div class="screen-header">
+                            <div class="screen-title">智能玩具屏幕</div>
+                            <div class="screen-status" id="screenStatus">静态形象模式</div>
+                        </div>
+                        
+                        <!-- 玩具形象展示区域 -->
+                        <div class="toy-display-area">
+                            <div class="image-display-container" id="imageDisplay">
+                                <!-- 静态形象展示 -->
+                                <div class="static-display" id="staticDisplay">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiM0Q0Y1RjAiLz4KPHN2ZyB4PSI4MCIgeT0iODAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyeiIvPgo8cGF0aCBkPSJNMTIgNkM4LjY5IDYgNiA4LjY5IDYgMTJzMi42OSA2IDYgNiA2LTIuNjkgNi02LTIuNjktNi02LTZ6Ii8+Cjwvc3ZnPgo8L3N2Zz4K" alt="静态形象" class="toy-image">
+                                    <div class="display-info">
+                                        <p>当前为静态形象</p>
+                                        <p>同步COZE平台封面</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- 动态形象展示 -->
+                                <div class="dynamic-display" id="dynamicDisplay" style="display: none;">
+                                    <div class="background-layer" id="backgroundLayer">
+                                        <!-- 背景图将在这里显示 -->
+                                    </div>
+                                    <div class="expression-layer" id="expressionLayer">
+                                        <!-- 表情动图将在这里显示 -->
+                                    </div>
+                                    <div class="display-info">
+                                        <p id="dynamicInfo">当前为动态形象</p>
+                                        <p id="expressionState">聆听状态</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 玩具控制按钮 -->
+                        <div class="toy-controls">
+                            <div class="control-buttons">
+                                <button class="control-btn" onclick="simulateListening()">模拟聆听</button>
+                                <button class="control-btn" onclick="simulateAnswering()">模拟回答</button>
+                                <button class="control-btn" onclick="simulateWaiting()">模拟待机</button>
+                                <button class="control-btn" onclick="simulateIdle()">模拟空闲</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 配置信息显示 -->
+                <div class="config-info">
+                    <h3>当前配置信息</h3>
+                    <div class="config-details">
+                        <div class="config-item">
+                            <span class="config-label">动态形象状态：</span>
+                            <span class="config-value" id="configStatus">关闭</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">背景图：</span>
+                            <span class="config-value" id="configBackground">未上传</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">表情动图：</span>
+                            <span class="config-value" id="configExpressions">未上传</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">资源完整性：</span>
+                            <span class="config-value" id="configCompleteness">不完整</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 切换模式按钮 -->
+                <div class="mode-switch">
+                    <button class="btn btn-primary" onclick="switchToStaticMode()">切换到静态模式</button>
+                    <button class="btn btn-primary" onclick="switchToDynamicMode()">切换到动态模式</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="preview.js"></script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能体形象管理 - 芷间云平台</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="image-management.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="platform-name">芷间云平台</h1>
+                <span class="module-name">智能体形象管理</span>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="avatar">👤</div>
+                    <span>超级管理员</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- 左侧导航栏 -->
+            <nav class="sidebar">
+                <div class="nav-item active">
+                    <span>📱</span>
+                    <span>智能体管理</span>
+                </div>
+                <div class="nav-sub-item active">
+                    <span>🤖</span>
+                    <span>智能体</span>
+                </div>
+                <div class="nav-item">
+                    <span>🏢</span>
+                    <span>租户管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📋</span>
+                    <span>方案管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📄</span>
+                    <span>模板管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📂</span>
+                    <span>分类管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📜</span>
+                    <span>脚本管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>📦</span>
+                    <span>产品管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>🔔</span>
+                    <span>通知消息</span>
+                </div>
+                <div class="nav-item">
+                    <span>💰</span>
+                    <span>财务管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>🎵</span>
+                    <span>音色管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>⚙️</span>
+                    <span>系统管理</span>
+                </div>
+            </nav>
+
+            <!-- 主要内容区域 -->
+            <main class="content">
+                <!-- 页面标题和返回按钮 -->
+                <div class="page-header">
+                    <button class="btn btn-secondary" onclick="goBack()">← 返回列表</button>
+                    <h2>智能体形象管理</h2>
+                    <div class="agent-info-header">
+                        <div class="agent-avatar">🤖</div>
+                        <div class="agent-details">
+                            <div class="agent-name" id="agentName">123123</div>
+                            <div class="agent-id" id="agentId">ID: 1001</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 形象管理容器（动态面板） -->
+                <div class="image-management-container">
+                    <!-- 状态1：静态形象展示（默认） -->
+                    <div class="panel-state" id="state1" data-state="static">
+                        <div class="static-image-section">
+                            <h3>静态形象</h3>
+                            <p class="description">静态形象同步COZE平台封面，动态形象关闭时展示</p>
+                            <div class="static-image-display">
+                                <div class="image-preview">
+                                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjVGNUY1Ii8+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiM0Q0Y1RjAiLz4KPHN2ZyB4PSI4MCIgeT0iODAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+CjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyeiIvPgo8cGF0aCBkPSJNMTIgNkM4LjY5IDYgNiA4LjY5IDYgMTJzMi42OSA2IDYgNiA2LTIuNjkgNi02LTIuNjktNi02LTZ6Ii8+Cjwvc3ZnPgo8L3N2Zz4K" alt="静态形象" class="static-image">
+                                </div>
+                                <div class="image-actions">
+                                    <button class="btn btn-secondary">AI生成</button>
+                                    <button class="btn btn-primary" onclick="switchToDynamic()">开启动态形象</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 状态2：动态形象关闭 -->
+                    <div class="panel-state" id="state2" data-state="dynamic-off" style="display: none;">
+                        <div class="dynamic-off-section">
+                            <h3>动态形象管理</h3>
+                            <div class="status-message">
+                                <div class="status-icon">⚠️</div>
+                                <p>动态形象已关闭，当前展示静态形象</p>
+                            </div>
+                            <div class="toggle-section">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="dynamicToggle" onchange="toggleDynamic()">
+                                    <span class="toggle-slider"></span>
+                                    开启动态形象
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 状态3：动态形象开启（资源配置） -->
+                    <div class="panel-state" id="state3" data-state="dynamic-on" style="display: none;">
+                        <div class="dynamic-on-section">
+                            <h3>动态形象配置</h3>
+                            <p class="description">需上传背景图和4个表情动图</p>
+                            
+                            <!-- 背景图上传 -->
+                            <div class="upload-section">
+                                <h4>背景图</h4>
+                                <div class="upload-area" id="backgroundUpload">
+                                    <input type="file" id="backgroundFile" accept="image/*" onchange="handleBackgroundUpload(event)" style="display: none;">
+                                    <div class="upload-placeholder" id="backgroundPlaceholder">
+                                        <span>+</span>
+                                        <p>上传背景</p>
+                                    </div>
+                                    <div class="upload-preview" id="backgroundPreview" style="display: none;">
+                                        <img id="backgroundImage" alt="背景图">
+                                        <button type="button" class="remove-btn" onclick="removeBackground()">×</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 表情动图组 -->
+                            <div class="expression-section">
+                                <h4>表情动图</h4>
+                                <div class="expression-grid">
+                                    <div class="expression-item">
+                                        <label>聆听表情</label>
+                                        <div class="upload-area" id="listeningUpload">
+                                            <input type="file" id="listeningFile" accept="image/*" onchange="handleExpressionUpload(event, 'listening')" style="display: none;">
+                                            <div class="upload-placeholder" id="listeningPlaceholder">
+                                                <span>+</span>
+                                                <p>上传聆听</p>
+                                            </div>
+                                            <div class="upload-preview" id="listeningPreview" style="display: none;">
+                                                <img id="listeningImage" alt="聆听表情">
+                                                <button type="button" class="remove-btn" onclick="removeExpression('listening')">×</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="expression-item">
+                                        <label>回答表情</label>
+                                        <div class="upload-area" id="answeringUpload">
+                                            <input type="file" id="answeringFile" accept="image/*" onchange="handleExpressionUpload(event, 'answering')" style="display: none;">
+                                            <div class="upload-placeholder" id="answeringPlaceholder">
+                                                <span>+</span>
+                                                <p>上传回答</p>
+                                            </div>
+                                            <div class="upload-preview" id="answeringPreview" style="display: none;">
+                                                <img id="answeringImage" alt="回答表情">
+                                                <button type="button" class="remove-btn" onclick="removeExpression('answering')">×</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="expression-item">
+                                        <label>待机表情</label>
+                                        <div class="upload-area" id="waitingUpload">
+                                            <input type="file" id="waitingFile" accept="image/*" onchange="handleExpressionUpload(event, 'waiting')" style="display: none;">
+                                            <div class="upload-placeholder" id="waitingPlaceholder">
+                                                <span>+</span>
+                                                <p>上传待机</p>
+                                            </div>
+                                            <div class="upload-preview" id="waitingPreview" style="display: none;">
+                                                <img id="waitingImage" alt="待机表情">
+                                                <button type="button" class="remove-btn" onclick="removeExpression('waiting')">×</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="expression-item">
+                                        <label>空闲表情</label>
+                                        <div class="upload-area" id="idleUpload">
+                                            <input type="file" id="idleFile" accept="image/*" onchange="handleExpressionUpload(event, 'idle')" style="display: none;">
+                                            <div class="upload-placeholder" id="idlePlaceholder">
+                                                <span>+</span>
+                                                <p>上传空闲</p>
+                                            </div>
+                                            <div class="upload-preview" id="idlePreview" style="display: none;">
+                                                <img id="idleImage" alt="空闲表情">
+                                                <button type="button" class="remove-btn" onclick="removeExpression('idle')">×</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 保存按钮 -->
+                            <div class="save-section">
+                                <button class="btn btn-primary" id="saveBtn" onclick="saveDynamicConfig()" disabled>保存配置</button>
+                                <button class="btn btn-secondary" onclick="switchToStatic()">关闭动态形象</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 预览按钮 -->
+                <div class="preview-section">
+                    <button class="btn btn-primary" onclick="openPreview()">玩具端预览</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 错误提示模态框 -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>配置不完整</h3>
+                <span class="close" onclick="closeErrorModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage">请上传背景图和4个表情动图</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeErrorModal()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="image-management.js"></script>
+</body>
+</html>
