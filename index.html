@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能体管理平台</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>正超云平台</h2>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <span>智能体管理</span>
+                </div>
+                <div class="nav-item active">
+                    <span>智能体列表</span>
+                </div>
+                <div class="nav-item">
+                    <span>力量管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>分类管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>智能体管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>群聊管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>消息监管</span>
+                </div>
+                <div class="nav-item">
+                    <span>用户管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>商品管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>订单管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>财务管理</span>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 头部 -->
+            <div class="header">
+                <div class="header-left">
+                    <h1>智能体</h1>
+                    <div class="breadcrumb">
+                        <span>智能体名称</span>
+                        <span>智能体分类</span>
+                        <button class="btn btn-primary">搜索</button>
+                        <button class="btn btn-secondary">重置</button>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-primary">新增</button>
+                    <span>批量</span>
+                    <span>导入/导出</span>
+                    <div class="user-info">
+                        <span>你好管理员</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 智能体列表 -->
+            <div class="agent-list">
+                <table class="agent-table">
+                    <thead>
+                        <tr>
+                            <th>智能体名称</th>
+                            <th>智能体分类</th>
+                            <th>智能体分类</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="agent-info">
+                                    <img src="https://via.placeholder.com/40x40/4F46E5/white?text=AI" alt="智能体头像" class="agent-avatar">
+                                    <div>
+                                        <div class="agent-name">智能助手</div>
+                                        <div class="agent-id">7522796173642266070</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>开发者 | 汽车 | 旅游</td>
+                            <td>
+                                <span class="status-tag">人员管理</span>
+                            </td>
+                            <td>2023-07-30 14:57:30</td>
+                            <td>
+                                <button class="btn btn-link">编辑</button>
+                                <button class="btn btn-link">使用设置</button>
+                                <button class="btn btn-link btn-avatar" onclick="openAvatarManagement('智能助手')">形象管理</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="agent-info">
+                                    <img src="https://via.placeholder.com/40x40/10B981/white?text=AI" alt="智能体头像" class="agent-avatar">
+                                    <div>
+                                        <div class="agent-name">SHGPT</div>
+                                        <div class="agent-id">7522796174255066070</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>用户</td>
+                            <td>
+                                <span class="status-tag">计划</span>
+                            </td>
+                            <td>2023-07-30 14:51:28</td>
+                            <td>
+                                <button class="btn btn-link">编辑</button>
+                                <button class="btn btn-link">使用设置</button>
+                                <button class="btn btn-link btn-avatar" onclick="openAvatarManagement('SHGPT')">形象管理</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="agent-info">
+                                    <img src="https://via.placeholder.com/40x40/F59E0B/white?text=AI" alt="智能体头像" class="agent-avatar">
+                                    <div>
+                                        <div class="agent-name">测试助手</div>
+                                        <div class="agent-id">7522796174255066071</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>开发者 | 汽车 | 旅游</td>
+                            <td>
+                                <span class="status-tag">计划</span>
+                            </td>
+                            <td>2023-07-30 14:45:06</td>
+                            <td>
+                                <button class="btn btn-link">编辑</button>
+                                <button class="btn btn-link">使用设置</button>
+                                <button class="btn btn-link btn-avatar" onclick="openAvatarManagement('测试助手')">形象管理</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- 分页 -->
+                <div class="pagination">
+                    <span>共16条</span>
+                    <div class="page-controls">
+                        <button class="page-btn">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">4</button>
+                        <button class="page-btn">5</button>
+                        <button class="page-btn">6</button>
+                        <button class="page-btn">7</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

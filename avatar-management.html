@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能体形象管理</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>正超云平台</h2>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <span>智能体管理</span>
+                </div>
+                <div class="nav-item active">
+                    <span>智能体列表</span>
+                </div>
+                <div class="nav-item">
+                    <span>力量管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>分类管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>智能体管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>群聊管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>消息监管</span>
+                </div>
+                <div class="nav-item">
+                    <span>用户管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>商品管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>订单管理</span>
+                </div>
+                <div class="nav-item">
+                    <span>财务管理</span>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 头部 -->
+            <div class="header">
+                <div class="header-left">
+                    <h1>智能体形象管理</h1>
+                    <div class="breadcrumb">
+                        <span>智能体列表</span>
+                        <span> > </span>
+                        <span id="current-agent-name">智能助手</span>
+                        <span> > </span>
+                        <span>形象管理</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-secondary" onclick="goBack()">返回列表</button>
+                    <div class="user-info">
+                        <span>你好管理员</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 形象管理容器 - 动态面板 -->
+            <div class="avatar-management-container">
+                <!-- 状态1: 静态形象展示（默认） -->
+                <div id="static-avatar-panel" class="panel-state active">
+                    <div class="panel-card">
+                        <h3>静态形象</h3>
+                        <div class="static-avatar-section">
+                            <div class="avatar-preview">
+                                <img id="static-avatar-img" src="https://via.placeholder.com/120x120/4F46E5/white?text=AI" alt="静态形象">
+                                <div class="avatar-info">
+                                    <p>当前静态形象同步COZE平台封面</p>
+                                    <button class="btn btn-secondary">AI生成</button>
+                                </div>
+                            </div>
+                            <div class="avatar-description">
+                                <p class="help-text">静态形象同步COZE平台封面，动态形象关闭时展示</p>
+                                <div class="dynamic-avatar-toggle">
+                                    <label class="toggle-label">
+                                        <span>启用动态形象</span>
+                                        <input type="checkbox" id="dynamic-toggle" onchange="toggleDynamicAvatar()">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 状态2: 动态形象关闭 -->
+                <div id="dynamic-disabled-panel" class="panel-state">
+                    <div class="panel-card">
+                        <h3>动态形象配置</h3>
+                        <div class="status-message warning">
+                            <i class="icon-warning">⚠️</i>
+                            <span>动态形象已关闭，当前展示静态形象</span>
+                        </div>
+                        <div class="dynamic-avatar-toggle">
+                            <label class="toggle-label">
+                                <span>启用动态形象</span>
+                                <input type="checkbox" id="dynamic-toggle-2" onchange="toggleDynamicAvatar()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p class="help-text">开启动态形象后，需要上传背景图和4个表情动图才能正常使用</p>
+                    </div>
+                </div>
+
+                <!-- 状态3: 动态形象开启（资源配置） -->
+                <div id="dynamic-enabled-panel" class="panel-state">
+                    <div class="panel-card">
+                        <h3>动态形象配置</h3>
+                        <div class="dynamic-avatar-toggle">
+                            <label class="toggle-label">
+                                <span>启用动态形象</span>
+                                <input type="checkbox" id="dynamic-toggle-3" checked onchange="toggleDynamicAvatar()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="status-message info" id="config-status">
+                            <i class="icon-info">ℹ️</i>
+                            <span>需上传背景图和4个表情动图</span>
+                        </div>
+
+                        <!-- 背景图上传 -->
+                        <div class="upload-section">
+                            <h4>背景图</h4>
+                            <div class="upload-item">
+                                <div class="upload-preview" id="background-preview">
+                                    <div class="upload-placeholder">
+                                        <i class="icon-upload">📁</i>
+                                        <span>点击上传背景图</span>
+                                        <input type="file" id="background-upload" accept="image/*" onchange="handleFileUpload(this, 'background')">
+                                    </div>
+                                </div>
+                                <div class="upload-info">
+                                    <p>建议尺寸：800x600px，支持JPG、PNG格式</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 表情动图组 -->
+                        <div class="upload-section">
+                            <h4>表情动图</h4>
+                            <div class="emotion-grid">
+                                <!-- 聆听表情 -->
+                                <div class="upload-item">
+                                    <label>聆听表情</label>
+                                    <div class="upload-preview" id="listening-preview">
+                                        <div class="upload-placeholder">
+                                            <i class="icon-upload">🎧</i>
+                                            <span>上传聆听动图</span>
+                                            <input type="file" id="listening-upload" accept="image/gif" onchange="handleFileUpload(this, 'listening')">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 回答表情 -->
+                                <div class="upload-item">
+                                    <label>回答表情</label>
+                                    <div class="upload-preview" id="speaking-preview">
+                                        <div class="upload-placeholder">
+                                            <i class="icon-upload">💬</i>
+                                            <span>上传回答动图</span>
+                                            <input type="file" id="speaking-upload" accept="image/gif" onchange="handleFileUpload(this, 'speaking')">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 待机表情 -->
+                                <div class="upload-item">
+                                    <label>待机表情</label>
+                                    <div class="upload-preview" id="standby-preview">
+                                        <div class="upload-placeholder">
+                                            <i class="icon-upload">😊</i>
+                                            <span>上传待机动图</span>
+                                            <input type="file" id="standby-upload" accept="image/gif" onchange="handleFileUpload(this, 'standby')">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 空闲表情 -->
+                                <div class="upload-item">
+                                    <label>空闲表情</label>
+                                    <div class="upload-preview" id="idle-preview">
+                                        <div class="upload-placeholder">
+                                            <i class="icon-upload">😴</i>
+                                            <span>上传空闲动图</span>
+                                            <input type="file" id="idle-upload" accept="image/gif" onchange="handleFileUpload(this, 'idle')">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="help-text">支持GIF格式，建议尺寸：200x200px，文件大小不超过2MB</p>
+                        </div>
+
+                        <!-- 保存按钮 -->
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="save-btn" onclick="saveConfiguration()" disabled>保存配置</button>
+                            <button class="btn btn-secondary" onclick="previewToyScreen()">预览效果</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示弹窗 -->
+    <div id="toast" class="toast"></div>
+
+    <script src="avatar-script.js"></script>
+</body>
+</html>
