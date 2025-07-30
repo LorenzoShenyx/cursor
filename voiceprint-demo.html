@@ -266,6 +266,16 @@
             color: #666;
         }
 
+        .voiceprint-role {
+            font-size: 11px;
+            color: #007AFF;
+            margin-top: 4px;
+            background: #e3f2fd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
         .default-badge {
             background: #007AFF;
             color: white;
@@ -415,6 +425,74 @@
             border-radius: 6px;
             font-size: 12px;
             cursor: pointer;
+        }
+
+        /* 角色信息卡片 */
+        .role-info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid #e3f2fd;
+        }
+
+        .role-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .role-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .edit-role-btn {
+            background: none;
+            border: 1px solid #007AFF;
+            color: #007AFF;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-role-btn:hover {
+            background: #007AFF;
+            color: white;
+        }
+
+        .role-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .role-item {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .role-label {
+            color: #666;
+            font-weight: 500;
+            min-width: 50px;
+        }
+
+        .role-value {
+            color: #333;
+            font-weight: 600;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 6px;
         }
 
         .status-overview {
@@ -889,10 +967,31 @@
             <!-- 步骤3：特征处理与命名 -->
             <div id="step3" class="step-container" style="display: none;">
                 <div class="step-title">声纹特征已采集</div>
-                <div class="step-desc">为它起个名字吧～</div>
+                <div class="step-desc">为它起个名字并设置角色信息吧～</div>
                 <div class="input-group">
                     <label class="input-label">声纹名称</label>
                     <input type="text" class="input-field" id="voiceprintName" placeholder="请输入2-10个字符" maxlength="10">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">角色称呼</label>
+                    <input type="text" class="input-field" id="roleNickname" placeholder="如：小明、李老师、妈妈等" maxlength="10">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">年龄</label>
+                    <input type="number" class="input-field" id="roleAge" placeholder="请输入年龄" min="1" max="120">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">性别</label>
+                    <select class="input-field" id="roleGender">
+                        <option value="">请选择性别</option>
+                        <option value="male">男</option>
+                        <option value="female">女</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">性格特点</label>
+                    <input type="text" class="input-field" id="rolePersonality" placeholder="如：活泼开朗、温和亲切等" maxlength="20">
                 </div>
                 <a href="#" class="quick-link" onclick="showPage('voiceprintDetail', {isNew: true})">提前关联设备/智能体？</a>
                 <div style="margin-top: 30px;">
@@ -912,6 +1011,32 @@
             <div class="detail-header">
                 <div class="detail-name" id="detailVoiceprintName">我的声纹</div>
                 <button class="edit-name-btn" onclick="editVoiceprintName()">编辑名称</button>
+            </div>
+
+            <!-- 角色信息卡片 -->
+            <div class="role-info-card">
+                <div class="role-header">
+                    <h3>角色信息</h3>
+                    <button class="edit-role-btn" onclick="editRoleInfo()">编辑</button>
+                </div>
+                <div class="role-details" id="roleDetails">
+                    <div class="role-item">
+                        <span class="role-label">称呼：</span>
+                        <span class="role-value" id="displayNickname">小明</span>
+                    </div>
+                    <div class="role-item">
+                        <span class="role-label">年龄：</span>
+                        <span class="role-value" id="displayAge">28岁</span>
+                    </div>
+                    <div class="role-item">
+                        <span class="role-label">性别：</span>
+                        <span class="role-value" id="displayGender">男</span>
+                    </div>
+                    <div class="role-item">
+                        <span class="role-label">性格：</span>
+                        <span class="role-value" id="displayPersonality">活泼开朗</span>
+                    </div>
+                </div>
             </div>
 
             <div class="status-overview">
@@ -1043,6 +1168,38 @@
         </div>
     </div>
 
+    <!-- 角色信息编辑弹窗 -->
+    <div id="roleEditModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-title">编辑角色信息</div>
+            <div class="input-group">
+                <label class="input-label">角色称呼</label>
+                <input type="text" class="input-field" id="editRoleNickname" placeholder="如：小明、李老师、妈妈等" maxlength="10">
+            </div>
+            <div class="input-group">
+                <label class="input-label">年龄</label>
+                <input type="number" class="input-field" id="editRoleAge" placeholder="请输入年龄" min="1" max="120">
+            </div>
+            <div class="input-group">
+                <label class="input-label">性别</label>
+                <select class="input-field" id="editRoleGender">
+                    <option value="">请选择性别</option>
+                    <option value="male">男</option>
+                    <option value="female">女</option>
+                    <option value="other">其他</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label class="input-label">性格特点</label>
+                <input type="text" class="input-field" id="editRolePersonality" placeholder="如：活泼开朗、温和亲切等" maxlength="20">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeRoleEditModal()">取消</button>
+                <button class="modal-btn primary" onclick="saveRoleInfo()">保存</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 全局变量
         let currentPage = 'myPage';
@@ -1053,7 +1210,13 @@
                 createTime: '2024-01-15',
                 isDefault: true,
                 deviceCount: 1,
-                agentCount: 2
+                agentCount: 2,
+                roleInfo: {
+                    nickname: '小明',
+                    age: 28,
+                    gender: 'male',
+                    personality: '活泼开朗'
+                }
             },
             {
                 id: 2,
@@ -1061,7 +1224,13 @@
                 createTime: '2024-01-10',
                 isDefault: false,
                 deviceCount: 0,
-                agentCount: 1
+                agentCount: 1,
+                roleInfo: {
+                    nickname: '李经理',
+                    age: 35,
+                    gender: 'male',
+                    personality: '专业严谨'
+                }
             }
         ];
         let selectedVoiceprint = 1;
@@ -1130,19 +1299,26 @@
             
             countElement.textContent = voiceprints.length;
             
-            container.innerHTML = voiceprints.map(vp => `
-                <div class="voiceprint-item" onclick="showVoiceprintDetail(${vp.id})">
-                    <button class="delete-btn" onclick="event.stopPropagation(); deleteVoiceprint(${vp.id})">删除</button>
-                    <div class="voiceprint-name">
-                        ${vp.name}
-                        ${vp.isDefault ? '<span class="default-badge">默认</span>' : ''}
+            container.innerHTML = voiceprints.map(vp => {
+                const roleInfo = vp.roleInfo || {};
+                const genderMap = { male: '男', female: '女', other: '其他' };
+                const roleText = `${roleInfo.nickname || '未设置'} · ${roleInfo.age ? roleInfo.age + '岁' : '年龄未知'} · ${genderMap[roleInfo.gender] || '性别未知'}`;
+                
+                return `
+                    <div class="voiceprint-item" onclick="showVoiceprintDetail(${vp.id})">
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteVoiceprint(${vp.id})">删除</button>
+                        <div class="voiceprint-name">
+                            ${vp.name}
+                            ${vp.isDefault ? '<span class="default-badge">默认</span>' : ''}
+                        </div>
+                        <div class="voiceprint-role">${roleText}</div>
+                        <div class="voiceprint-meta">
+                            <span>采集时间：${vp.createTime}</span>
+                            <span>关联：${vp.deviceCount}设备 ${vp.agentCount}智能体</span>
+                        </div>
                     </div>
-                    <div class="voiceprint-meta">
-                        <span>采集时间：${vp.createTime}</span>
-                        <span>关联：${vp.deviceCount}设备 ${vp.agentCount}智能体</span>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // 显示声纹详情
@@ -1159,6 +1335,15 @@
                 document.getElementById('detailVoiceprintName').textContent = voiceprint.name;
                 document.getElementById('deviceCount').textContent = `已关联 ${voiceprint.deviceCount} 台设备`;
                 document.getElementById('agentCount').textContent = `已关联 ${voiceprint.agentCount} 个智能体`;
+                
+                // 更新角色信息显示
+                const roleInfo = voiceprint.roleInfo || {};
+                const genderMap = { male: '男', female: '女', other: '其他' };
+                
+                document.getElementById('displayNickname').textContent = roleInfo.nickname || '未设置';
+                document.getElementById('displayAge').textContent = roleInfo.age ? roleInfo.age + '岁' : '未设置';
+                document.getElementById('displayGender').textContent = genderMap[roleInfo.gender] || '未设置';
+                document.getElementById('displayPersonality').textContent = roleInfo.personality || '未设置';
             }
         }
 
@@ -1180,6 +1365,10 @@
             document.getElementById('step2').style.display = 'none';
             document.getElementById('step3').style.display = 'none';
             document.getElementById('voiceprintName').value = '';
+            document.getElementById('roleNickname').value = '';
+            document.getElementById('roleAge').value = '';
+            document.getElementById('roleGender').value = '';
+            document.getElementById('rolePersonality').value = '';
         }
 
         // 更换示例文本
@@ -1222,6 +1411,10 @@
         // 完成采集
         function completeCollection() {
             const name = document.getElementById('voiceprintName').value.trim();
+            const nickname = document.getElementById('roleNickname').value.trim();
+            const age = document.getElementById('roleAge').value;
+            const gender = document.getElementById('roleGender').value;
+            const personality = document.getElementById('rolePersonality').value.trim();
             
             if (!name) {
                 showModal('提示', '请为声纹命名～', () => {
@@ -1236,6 +1429,13 @@
                 });
                 return;
             }
+
+            if (!nickname) {
+                showModal('提示', '请输入角色称呼～', () => {
+                    closeModal();
+                });
+                return;
+            }
             
             // 添加新声纹
             const newVoiceprint = {
@@ -1244,7 +1444,13 @@
                 createTime: new Date().toISOString().split('T')[0],
                 isDefault: voiceprints.length === 0,
                 deviceCount: 0,
-                agentCount: 0
+                agentCount: 0,
+                roleInfo: {
+                    nickname: nickname,
+                    age: age ? parseInt(age) : null,
+                    gender: gender,
+                    personality: personality
+                }
             };
             
             voiceprints.push(newVoiceprint);
@@ -1347,13 +1553,21 @@
             }
             
             const selector = document.getElementById('voiceprintSelector');
-            selector.innerHTML = voiceprints.map(vp => `
-                <div class="voiceprint-option ${vp.id === selectedVoiceprint ? 'selected' : ''}" 
-                     onclick="selectVoiceprint(${vp.id})">
-                    <span>${vp.name} ${vp.isDefault ? '(默认)' : ''}</span>
-                    <span>${vp.id === selectedVoiceprint ? '✓' : ''}</span>
-                </div>
-            `).join('');
+            selector.innerHTML = voiceprints.map(vp => {
+                const roleInfo = vp.roleInfo || {};
+                const roleDesc = roleInfo.nickname ? `(${roleInfo.nickname})` : '';
+                
+                return `
+                    <div class="voiceprint-option ${vp.id === selectedVoiceprint ? 'selected' : ''}" 
+                         onclick="selectVoiceprint(${vp.id})">
+                        <div>
+                            <div>${vp.name} ${vp.isDefault ? '(默认)' : ''}</div>
+                            <div style="font-size: 12px; color: #666; margin-top: 2px;">${roleDesc}</div>
+                        </div>
+                        <span>${vp.id === selectedVoiceprint ? '✓' : ''}</span>
+                    </div>
+                `;
+            }).join('');
             
             document.getElementById('voiceprintModal').classList.add('active');
         }
@@ -1410,15 +1624,38 @@
             addMessage(message, 'user');
             input.value = '';
             
-            // 模拟AI回复
+            // 模拟AI回复（根据角色信息个性化）
             setTimeout(() => {
-                const responses = [
+                const selectedVp = voiceprints.find(vp => vp.id === selectedVoiceprint);
+                const roleInfo = selectedVp?.roleInfo || {};
+                
+                let responses = [
                     'Ho ho ho! 这真是个有趣的话题！',
                     '根据你的声纹特征，我能感受到你今天心情不错呢！',
                     '你的声音听起来很温暖，就像圣诞节的炉火一样！',
                     '让我想想...这个问题很有意思！',
                     '你知道吗？每个人的声纹都是独一无二的，就像雪花一样！'
                 ];
+                
+                // 根据角色信息个性化回复
+                if (roleInfo.nickname) {
+                    responses.unshift(`Ho ho ho! ${roleInfo.nickname}，很高兴和你聊天！`);
+                }
+                
+                if (roleInfo.age && roleInfo.age < 18) {
+                    responses.push('作为一个年轻人，你的想法真有创意！');
+                } else if (roleInfo.age && roleInfo.age > 50) {
+                    responses.push('您的人生阅历一定很丰富，这个话题很有深度！');
+                }
+                
+                if (roleInfo.personality) {
+                    if (roleInfo.personality.includes('活泼') || roleInfo.personality.includes('开朗')) {
+                        responses.push('你的活泼开朗让圣诞节更加欢乐！');
+                    } else if (roleInfo.personality.includes('温和') || roleInfo.personality.includes('亲切')) {
+                        responses.push('你温和的性格让人感到很舒服呢！');
+                    }
+                }
+                
                 const randomResponse = responses[Math.floor(Math.random() * responses.length)];
                 addMessage(randomResponse, 'assistant');
             }, 1000);
@@ -1469,6 +1706,58 @@
         function confirmAction() {
             if (pendingAction) {
                 pendingAction();
+            }
+        }
+
+        // 编辑角色信息
+        function editRoleInfo() {
+            const voiceprint = voiceprints.find(vp => vp.id === currentDetailId);
+            if (voiceprint && voiceprint.roleInfo) {
+                const roleInfo = voiceprint.roleInfo;
+                document.getElementById('editRoleNickname').value = roleInfo.nickname || '';
+                document.getElementById('editRoleAge').value = roleInfo.age || '';
+                document.getElementById('editRoleGender').value = roleInfo.gender || '';
+                document.getElementById('editRolePersonality').value = roleInfo.personality || '';
+            }
+            document.getElementById('roleEditModal').classList.add('active');
+        }
+
+        // 关闭角色信息编辑弹窗
+        function closeRoleEditModal() {
+            document.getElementById('roleEditModal').classList.remove('active');
+        }
+
+        // 保存角色信息
+        function saveRoleInfo() {
+            const nickname = document.getElementById('editRoleNickname').value.trim();
+            const age = document.getElementById('editRoleAge').value;
+            const gender = document.getElementById('editRoleGender').value;
+            const personality = document.getElementById('editRolePersonality').value.trim();
+
+            if (!nickname) {
+                showModal('提示', '请输入角色称呼～', () => {
+                    closeModal();
+                });
+                return;
+            }
+
+            // 更新数据
+            const voiceprint = voiceprints.find(vp => vp.id === currentDetailId);
+            if (voiceprint) {
+                voiceprint.roleInfo = {
+                    nickname: nickname,
+                    age: age ? parseInt(age) : null,
+                    gender: gender,
+                    personality: personality
+                };
+
+                // 更新显示
+                loadVoiceprintDetail(currentDetailId);
+                closeRoleEditModal();
+                
+                showModal('保存成功', '角色信息已更新！', () => {
+                    closeModal();
+                });
             }
         }
 
